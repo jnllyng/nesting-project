@@ -32,3 +32,14 @@ provinces = [
 provinces.each do |province|
   Province.find_or_create_by(name: province[:name]).update(province)
 end
+
+# Pages
+Page.find_or_create_by(page_type: "about").update(
+  title: "About Us",
+  content: "Nesting is a Winnipeg-based vintage furniture store founded in 2014. We specialize in curated vintage furniture and home decor accessories."
+)
+
+Page.find_or_create_by(page_type: "contact").update(
+  title: "Contact Us",
+  content: "Visit us at our showroom in Winnipeg. Email: hello@nesting.ca | Phone: (204) 555-0123"
+)
