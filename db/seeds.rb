@@ -1,12 +1,6 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+require 'csv'
+
+# Admin User
 AdminUser.find_or_create_by!(email: 'admin@example.com') do |admin|
   admin.password = 'password'
   admin.password_confirmation = 'password'
@@ -33,13 +27,21 @@ provinces.each do |province|
   Province.find_or_create_by(name: province[:name]).update(province)
 end
 
-# Pages
-Page.find_or_create_by(page_type: "about").update(
-  title: "About Us",
-  content: "Nesting is a Winnipeg-based vintage furniture store founded in 2014. We specialize in curated vintage furniture and home decor accessories."
-)
+# Categories from CSV
+CSV.foreach(Rails.root.join('db/data/categories.csv'), headers: true) do |row|
+  Category.find_or_create_by(name: row['name']).update(description: row['description'])
+end
 
-Page.find_or_create_by(page_type: "contact").update(
-  title: "Contact Us",
-  content: "Visit us at our showroom in Winnipeg. Email: hello@nesting.ca | Phone: (204) 555-0123"
-)
+# Products from CSV
+CSV.foreach(Rails.root.join('db/data/products.csv'), headers: true) do |row|
+  category = Category.find_by(name: row['category'])
+  next unless category
+
+  Product.find_or_create_by(name: row['name']).update(
+    description: row['description'],
+    price: row['price'],
+    stock: row['stock'],
+    category: category,
+    image_url: row['image']
+  )
+end

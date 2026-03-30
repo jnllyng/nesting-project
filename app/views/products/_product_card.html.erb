@@ -2,6 +2,8 @@
   <%= link_to product_path(product) do %>
     <% if product.image.attached? %>
       <%= image_tag product.image %>
+    <% elsif product.image_url.present? %>
+      <%= image_tag product.image_url %>
     <% else %>
       <div class="placeholder-img"></div>
     <% end %>

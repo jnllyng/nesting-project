@@ -2,6 +2,8 @@
   <div class="col-7">
     <% if @product.image.attached? %>
       <%= image_tag @product.image, style: "width: 100%; height: 85vh; object-fit: cover;" %>
+    <% elsif @product.image_url.present? %>
+      <%= image_tag @product.image_url, style: "width: 100%; height: 85vh; object-fit: cover;" %>
     <% else %>
       <div style="width: 100%; height: 85vh; background-color: #f0f0f0;"></div>
     <% end %>
