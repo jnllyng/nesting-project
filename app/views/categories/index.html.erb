@@ -1,8 +1,11 @@
 <h1>Categories</h1>
-
-<% @categories.each do |category| %>
-  <div>
-    <h2><%= link_to category.name, category_path(category) %></h2>
-    <p><%= category.description %></p>
-  </div>
-<% end %>
+<div class="row" style="margin-top: 40px;">
+  <% @categories.each do |category| %>
+    <div class="col-4" style="margin-bottom: 40px;">
+      <%= link_to category_path(category), style: "text-decoration: none; color: #111;" do %>
+        <div style="background-color: #f0f0f0; height: 300px; margin-bottom: 15px;"></div>
+        <p style="font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;">← <%= category.name %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

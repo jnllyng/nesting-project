@@ -1,9 +1,26 @@
-<% if @product.image.attached? %>
-  <%= image_tag @product.image, width: 400 %>
-<% end %>
-<h1><%= @product.name %></h1>
-<p><%= @product.category.name if @product.category %></p>
-<p>$<%= @product.price %></p>
-<p><%= @product.description %></p>
-<p>Stock: <%= @product.stock %></p>
-<%= link_to "Back to Products", products_path %>
+<div class="row">
+  <div class="col-7">
+    <% if @product.image.attached? %>
+      <%= image_tag @product.image, style: "width: 100%; height: 85vh; object-fit: cover;" %>
+    <% else %>
+      <div style="width: 100%; height: 85vh; background-color: #f0f0f0;"></div>
+    <% end %>
+  </div>
+
+  <div class="col-5" style="padding: 60px 40px;">
+    <p style="font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: #999; margin-bottom: 10px;">
+      <%= @product.category.name if @product.category %>
+    </p>
+    <h1 style="font-size: 1.1rem; letter-spacing: 0.08em; margin-bottom: 20px;">
+      <%= @product.name.upcase %>
+    </h1>
+    <p style="font-size: 0.9rem; color: #666; margin-bottom: 30px;">
+      $<%= number_with_precision(@product.price, precision: 2) %>
+    </p>
+    <p style="font-size: 0.85rem; line-height: 1.8; margin-bottom: 40px;">
+      <%= @product.description %>
+    </p>
+    <p style="font-size: 0.8rem; color: #999;">In stock: <%= @product.stock %></p>
+    <%= link_to "← Back", products_path, style: "font-size: 0.8rem; color: #111; text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;" %>
+  </div>
+</div>
