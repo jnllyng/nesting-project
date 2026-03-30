@@ -1,0 +1,8 @@
+<h1><%= @category.name %></h1>
+<p><%= @category.description %></p>
+
+<% @products.each do |product| %>
+  <%= render "products/product_card", product: product %>
+<% end %>
+
+<%= link_to "All Categories", categories_path %>
