@@ -1,4 +1,7 @@
 <div>
+  <% if product.image.attached? %>
+    <%= image_tag product.image, width: 200 %>
+  <% end %>
   <h3><%= product.name %></h3>
   <p><%= product.category.name if product.category %></p>
   <p>$<%= product.price %></p>

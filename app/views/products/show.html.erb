@@ -1,3 +1,6 @@
+<% if @product.image.attached? %>
+  <%= image_tag @product.image, width: 400 %>
+<% end %>
 <h1><%= @product.name %></h1>
 <p><%= @product.category.name if @product.category %></p>
 <p>$<%= @product.price %></p>
