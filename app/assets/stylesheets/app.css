@@ -93,3 +93,27 @@ h1 {
   text-transform: uppercase;
   margin-bottom: 40px;
 }
+.pagination {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination a, .pagination span {
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: #111;
+  text-decoration: none;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+}
+
+.pagination .current {
+  background: #111;
+  color: #fff;
+  padding: 5px 10px;
+  border: 1px solid #111;
+  font-size: 0.8rem;
+}

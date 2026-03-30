@@ -1,5 +1,29 @@
+<div style="padding: 20px 0; margin-bottom: 30px; border-bottom: 1px solid #eee;">
+  <form action="<%= products_path %>" method="get" style="display: flex; gap: 15px; align-items: center;">
+    <input type="text" name="search" value="<%= params[:search] %>" placeholder="Search products..." style="padding: 8px 12px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; width: 250px;">
+    <select name="category_id" style="padding: 8px 12px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem;">
+      <option value="">All Categories</option>
+      <% @categories.each do |category| %>
+        <option value="<%= category.id %>" <%= 'selected' if params[:category_id] == category.id.to_s %>><%= category.name %></option>
+      <% end %>
+    </select>
+    <button type="submit" style="padding: 8px 20px; background: #111; color: #fff; border: none; font-family: inherit; font-size: 0.85rem; letter-spacing: 0.05em; cursor: pointer;">Search</button>
+  </form>
+</div>
+
+<div style="margin-bottom: 30px;">
+  <%= link_to "All", products_path, style: "margin-right: 20px; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: #{params[:filter].blank? ? '#111' : '#999'}; text-decoration: none;" %>
+  <%= link_to "On Sale", products_path(filter: "on_sale"), style: "margin-right: 20px; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: #{params[:filter] == 'on_sale' ? '#111' : '#999'}; text-decoration: none;" %>
+  <%= link_to "New", products_path(filter: "new"), style: "margin-right: 20px; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: #{params[:filter] == 'new' ? '#111' : '#999'}; text-decoration: none;" %>
+  <%= link_to "Recently Updated", products_path(filter: "updated"), style: "font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: #{params[:filter] == 'updated' ? '#111' : '#999'}; text-decoration: none;" %>
+</div>
+
 <div class="product-grid">
   <% @products.each do |product| %>
     <%= render "product_card", product: product %>
   <% end %>
+</div>
+
+<div style="margin-top: 40px; text-align: center;">
+  <%= paginate @products %>
 </div>
