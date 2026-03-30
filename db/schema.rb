@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_30_012049) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_30_024353) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -26,6 +26,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_30_012049) do
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
+  end
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "city"
+    t.datetime "created_at", null: false
+    t.string "postal_code"
+    t.integer "province_id"
+    t.string "street"
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
   end
 
   create_table "admin_users", force: :cascade do |t|
@@ -47,6 +57,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_30_012049) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "order_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "item_price"
+    t.integer "order_id"
+    t.integer "product_id"
+    t.integer "quantity"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "address_id"
+    t.datetime "created_at", null: false
+    t.decimal "gst_rate"
+    t.decimal "hst_rate"
+    t.integer "province_id"
+    t.decimal "pst_rate"
+    t.string "status"
+    t.decimal "total"
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
@@ -56,6 +88,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_30_012049) do
     t.integer "stock"
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_products_on_category_id"
+  end
+
+  create_table "provinces", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "gst"
+    t.decimal "hst"
+    t.string "name"
+    t.decimal "pst"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "products", "categories"
