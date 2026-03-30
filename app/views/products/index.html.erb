@@ -1,0 +1,4 @@
+<h1>Our Products</h1>
+<% @products.each do |product| %>
+  <%= render "product_card", product: product %>
+<% end %>
