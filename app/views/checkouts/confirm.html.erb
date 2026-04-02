@@ -29,19 +29,19 @@
       </div>
       <% if @checkout["gst"].to_f > 0 %>
         <div style="display: flex; justify-content: space-between;">
-          <span>GST (<%= @province.gst %>%)</span>
+          <span>GST (<%= number_with_precision(@province.gst * 100, precision: 0) %>%)</span>
           <span>$<%= number_with_precision(@checkout["gst"], precision: 2) %></span>
         </div>
       <% end %>
       <% if @checkout["pst"].to_f > 0 %>
         <div style="display: flex; justify-content: space-between;">
-          <span>PST (<%= @province.pst %>%)</span>
+          <span>PST (<%= number_with_precision(@province.pst * 100, precision: 0) %>%)</span>
           <span>$<%= number_with_precision(@checkout["pst"], precision: 2) %></span>
         </div>
       <% end %>
       <% if @checkout["hst"].to_f > 0 %>
         <div style="display: flex; justify-content: space-between;">
-          <span>HST (<%= @province.hst %>%)</span>
+          <span>HST (<%= number_with_precision(@province.hst * 100, precision: 0) %>%)</span>
           <span>$<%= number_with_precision(@checkout["hst"], precision: 2) %></span>
         </div>
       <% end %>

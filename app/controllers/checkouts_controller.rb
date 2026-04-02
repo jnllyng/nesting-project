@@ -28,9 +28,9 @@ class CheckoutsController < ApplicationController
 
     province = Province.find(address_params[:province_id])
     subtotal = @cart_items.sum { |item| item[:product].price * item[:quantity] }
-    gst = (subtotal * province.gst / 100).round(2)
-    pst = (subtotal * province.pst / 100).round(2)
-    hst = (subtotal * province.hst / 100).round(2)
+    gst = (subtotal * province.gst).round(2)
+    pst = (subtotal * province.pst).round(2)
+    hst = (subtotal * province.hst).round(2)
     total = (subtotal + gst + pst + hst).round(2)
 
     session[:checkout] = {
