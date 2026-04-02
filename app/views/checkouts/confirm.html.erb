@@ -1,0 +1,60 @@
+<h1>Order Confirmation</h1>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 30px;">
+  <div>
+    <h2 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;">Shipping To</h2>
+    <p style="font-size: 0.85rem; line-height: 1.8;">
+      <%= @checkout["address"]["street"] %><br>
+      <%= @checkout["address"]["city"] %><br>
+      <%= @checkout["address"]["postal_code"] %><br>
+      <%= @province.name %>
+    </p>
+
+    <h2 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 30px; margin-bottom: 20px;">Order Items</h2>
+    <% @cart_items.each do |item| %>
+      <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.85rem;">
+        <span><%= item[:product].name %> × <%= item[:quantity] %></span>
+        <span>$<%= number_with_precision(item[:product].price * item[:quantity], precision: 2) %></span>
+      </div>
+    <% end %>
+  </div>
+
+  <div>
+    <h2 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;">Order Total</h2>
+
+    <div style="font-size: 0.85rem; line-height: 2;">
+      <div style="display: flex; justify-content: space-between;">
+        <span>Subtotal</span>
+        <span>$<%= number_with_precision(@checkout["subtotal"], precision: 2) %></span>
+      </div>
+      <% if @checkout["gst"].to_f > 0 %>
+        <div style="display: flex; justify-content: space-between;">
+          <span>GST (<%= @province.gst %>%)</span>
+          <span>$<%= number_with_precision(@checkout["gst"], precision: 2) %></span>
+        </div>
+      <% end %>
+      <% if @checkout["pst"].to_f > 0 %>
+        <div style="display: flex; justify-content: space-between;">
+          <span>PST (<%= @province.pst %>%)</span>
+          <span>$<%= number_with_precision(@checkout["pst"], precision: 2) %></span>
+        </div>
+      <% end %>
+      <% if @checkout["hst"].to_f > 0 %>
+        <div style="display: flex; justify-content: space-between;">
+          <span>HST (<%= @province.hst %>%)</span>
+          <span>$<%= number_with_precision(@checkout["hst"], precision: 2) %></span>
+        </div>
+      <% end %>
+      <div style="display: flex; justify-content: space-between; font-weight: 500; border-top: 1px solid #111; margin-top: 10px; padding-top: 10px;">
+        <span>Total</span>
+        <span>$<%= number_with_precision(@checkout["total"], precision: 2) %></span>
+      </div>
+    </div>
+
+    <%= form_with url: complete_checkout_path, method: :post, local: true do |f| %>
+      <%= f.submit "Place Order", style: "margin-top: 30px; padding: 12px 30px; background: #111; color: #fff; border: none; font-family: inherit; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; width: 100%;" %>
+    <% end %>
+
+    <%= link_to "← Edit Address", checkout_path, style: "display: block; margin-top: 15px; font-size: 0.8rem; color: #999; text-align: center;" %>
+  </div>
+</div>

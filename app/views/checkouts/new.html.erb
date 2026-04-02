@@ -1,0 +1,53 @@
+<div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+  <h1>Checkout</h1>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 30px;">
+    <div>
+      <h2 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;">Shipping Address</h2>
+
+      <%= form_with url: checkout_path, method: :post, local: true do |f| %>
+        <div style="margin-bottom: 15px;">
+          <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Street</label>
+          <input type="text" name="address[street]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 15px;">
+          <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">City</label>
+          <input type="text" name="address[city]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 15px;">
+          <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Postal Code</label>
+          <input type="text" name="address[postal_code]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Province</label>
+          <select name="address[province_id]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+            <option value="">Select Province</option>
+            <% @provinces.each do |p| %>
+              <option value="<%= p.id %>"><%= p.name %></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <input type="checkbox" name="save_address" value="1" id="save_address">
+          <label for="save_address" style="font-size: 0.8rem; margin-left: 5px;">Save this address for future orders</label>
+        </div>
+
+        <button type="submit" style="padding: 12px 30px; background: #111; color: #fff; border: none; font-family: inherit; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">Review Order</button>
+      <% end %>
+    </div>
+
+    <div>
+      <h2 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;">Order Summary</h2>
+      <% @cart_items.each do |item| %>
+        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.85rem;">
+          <span><%= item[:product].name %> × <%= item[:quantity] %></span>
+          <span>$<%= number_with_precision(item[:product].price * item[:quantity], precision: 2) %></span>
+        </div>
+      <% end %>
+      <div style="margin-top: 15px; font-size: 0.85rem; color: #999;">
+        Tax will be calculated based on province.
+      </div>
+    </div>
+  </div>
+</div>
