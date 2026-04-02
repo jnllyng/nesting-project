@@ -23,6 +23,7 @@
       <%= @product.description %>
     </p>
     <p style="font-size: 0.8rem; color: #999;">In stock: <%= @product.stock %></p>
+    <%= button_to "Add to Cart", add_to_cart_path(@product.id), method: :post, style: "padding: 12px 30px; background: #111; color: #fff; border: none; font-family: inherit; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; margin-bottom: 20px;" %>
     <%= link_to "← Back", products_path, style: "font-size: 0.8rem; color: #111; text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;" %>
   </div>
 </div>

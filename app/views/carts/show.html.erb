@@ -1,0 +1,55 @@
+<h1>Shopping Cart</h1>
+
+<% if @cart_items.empty? %>
+  <p style="color: #999; font-size: 0.9rem;">Your cart is empty.</p>
+  <%= link_to "Continue Shopping", products_path, style: "font-size: 0.85rem; color: #111; text-transform: uppercase; letter-spacing: 0.05em;" %>
+<% else %>
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
+    <thead>
+      <tr style="border-bottom: 1px solid #111;">
+        <th style="text-align: left; padding: 10px 0; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 400;">Product</th>
+        <th style="text-align: left; padding: 10px 0; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 400;">Price</th>
+        <th style="text-align: left; padding: 10px 0; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 400;">Quantity</th>
+        <th style="text-align: left; padding: 10px 0; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 400;">Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart_items.each do |item| %>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 20px 0;">
+            <div style="display: flex; align-items: center; gap: 20px;">
+              <% if item[:product].image.attached? %>
+                <%= image_tag item[:product].image, style: "width: 80px; height: 80px; object-fit: cover;" %>
+              <% elsif item[:product].image_url.present? %>
+                <%= image_tag item[:product].image_url, style: "width: 80px; height: 80px; object-fit: cover;" %>
+              <% else %>
+                <div style="width: 80px; height: 80px; background: #f0f0f0;"></div>
+              <% end %>
+              <span style="font-size: 0.85rem;"><%= item[:product].name %></span>
+            </div>
+          </td>
+          <td style="font-size: 0.85rem;">$<%= number_with_precision(item[:product].price, precision: 2) %></td>
+          <td>
+            <%= form_with url: update_cart_path(item[:product].id), method: :patch, local: true do |f| %>
+              <input type="number" name="quantity" value="<%= item[:quantity] %>" min="1" style="width: 60px; padding: 5px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem;">
+              <button type="submit" style="padding: 5px 10px; background: #111; color: #fff; border: none; font-size: 0.75rem; cursor: pointer; margin-left: 5px;">Update</button>
+            <% end %>
+          </td>
+          <td style="font-size: 0.85rem;">$<%= number_with_precision(item[:product].price * item[:quantity], precision: 2) %></td>
+          <td>
+            <%= button_to "Remove", remove_from_cart_path(item[:product].id), method: :delete, style: "background: none; border: none; font-size: 0.75rem; text-decoration: underline; cursor: pointer; color: #999;" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div style="text-align: right; margin-bottom: 30px;">
+    <p style="font-size: 0.9rem; letter-spacing: 0.05em;">
+      Total: <strong>$<%= number_with_precision(@cart_items.sum { |item| item[:product].price * item[:quantity] }, precision: 2) %></strong>
+    </p>
+  </div>
+
+  <%= link_to "Continue Shopping", products_path, style: "font-size: 0.8rem; color: #111; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none;" %>
+<% end %>
