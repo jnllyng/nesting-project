@@ -19,6 +19,8 @@ gem "activeadmin"
 gem "devise"
 gem "sassc-rails"
 gem "kaminari"
+gem "stripe"
+gem "dotenv-rails", groups: [ :development, :test ]
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 

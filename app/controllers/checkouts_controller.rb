@@ -58,45 +58,58 @@ class CheckoutsController < ApplicationController
   end
 
   def complete
-    @cart = session[:cart] || {}
-    @checkout = session[:checkout]
-    @cart_items = build_cart_items(@cart)
+  @cart = session[:cart] || {}
+  @checkout = session[:checkout]
+  @cart_items = build_cart_items(@cart)
 
-    address_data = @checkout["address"]
-    province = Province.find(@checkout["province_id"])
-
-    address = current_user.addresses.find_or_create_by(
-      street: address_data["street"],
-      city: address_data["city"],
-      postal_code: address_data["postal_code"],
-      province: province
+  begin
+    charge = Stripe::Charge.create(
+      amount: (@checkout["total"].to_f * 100).to_i,
+      currency: "cad",
+      source: params[:stripeToken],
+      description: "Nesting Order"
     )
-
-    order = Order.create!(
-      user: current_user,
-      address: address,
-      province: province,
-      status: "new",
-      total: @checkout["total"],
-      gst_rate: province.gst,
-      pst_rate: province.pst,
-      hst_rate: province.hst
-    )
-
-    @cart_items.each do |item|
-      OrderItem.create!(
-        order: order,
-        product: item[:product],
-        quantity: item[:quantity],
-        item_price: item[:product].price
-      )
-    end
-
-    session[:cart] = {}
-    session[:checkout] = nil
-
-    redirect_to root_path, notice: "Order placed successfully! Order ##{order.id}"
+  rescue Stripe::CardError => e
+    redirect_to confirm_checkout_path, alert: e.message
+    return
   end
+
+  address_data = @checkout["address"]
+  province = Province.find(@checkout["province_id"])
+
+  address = current_user.addresses.find_or_create_by(
+    street: address_data["street"],
+    city: address_data["city"],
+    postal_code: address_data["postal_code"],
+    province: province
+  )
+
+  order = Order.create!(
+    user: current_user,
+    address: address,
+    province: province,
+    status: "paid",
+    total: @checkout["total"],
+    gst_rate: province.gst,
+    pst_rate: province.pst,
+    hst_rate: province.hst,
+    stripe_charge_id: charge.id
+  )
+
+  @cart_items.each do |item|
+    OrderItem.create!(
+      order: order,
+      product: item[:product],
+      quantity: item[:quantity],
+      item_price: item[:product].price
+    )
+  end
+
+  session[:cart] = {}
+  session[:checkout] = nil
+
+  redirect_to order_path(order), notice: "Payment successful! Order ##{order.id} confirmed."
+end
 
   private
 

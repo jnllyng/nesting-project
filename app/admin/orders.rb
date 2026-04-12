@@ -16,24 +16,25 @@ ActiveAdmin.register Order do
   filter :created_at
 
   show do
-    attributes_table do
-      row :id
-      row :user
-      row :status
-      row :total
-      row :address
-      row :province
-      row :created_at
-    end
+  attributes_table do
+    row :id
+    row :user
+    row :status
+    row :total
+    row :address
+    row :province
+    row :stripe_charge_id
+    row :created_at
+  end
 
-    panel "Order Items" do
-      table_for order.order_items do
-        column :product
-        column :quantity
-        column :item_price
-      end
+  panel "Order Items" do
+    table_for order.order_items do
+      column :product
+      column :quantity
+      column :item_price
     end
   end
+end
 
   form do |f|
     f.inputs do

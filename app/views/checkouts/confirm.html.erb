@@ -51,10 +51,36 @@
       </div>
     </div>
 
-    <%= form_with url: complete_checkout_path, method: :post, local: true do |f| %>
-      <%= f.submit "Place Order", style: "margin-top: 30px; padding: 12px 30px; background: #111; color: #fff; border: none; font-family: inherit; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; width: 100%;" %>
+    <%= form_with url: complete_checkout_path, method: :post, local: true, id: "payment-form" do |f| %>
+      <div style="margin-top: 20px;">
+        <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Card Details</label>
+        <div id="card-element" style="padding: 10px; border: 1px solid #ddd; font-family: inherit;"></div>
+        <div id="card-errors" style="color: #cc0000; font-size: 0.8rem; margin-top: 8px;"></div>
+      </div>
+      <input type="hidden" name="stripeToken" id="stripeToken">
+      <%= f.submit "Pay $#{number_with_precision(@checkout["total"], precision: 2)}", style: "margin-top: 20px; padding: 12px 30px; background: #111; color: #fff; border: none; font-family: inherit; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; width: 100%;" %>
     <% end %>
 
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      var stripe = Stripe('<%= ENV["STRIPE_PUBLISHABLE_KEY"] %>');
+      var elements = stripe.elements();
+      var card = elements.create('card');
+      card.mount('#card-element');
+
+      var form = document.getElementById('payment-form');
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        stripe.createToken(card).then(function(result) {
+          if (result.error) {
+            document.getElementById('card-errors').textContent = result.error.message;
+          } else {
+            document.getElementById('stripeToken').value = result.token.id;
+            form.submit();
+          }
+        });
+      });
+    </script>
     <%= link_to "← Edit Address", checkout_path, style: "display: block; margin-top: 15px; font-size: 0.8rem; color: #999; text-align: center;" %>
   </div>
 </div>
