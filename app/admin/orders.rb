@@ -11,6 +11,10 @@ ActiveAdmin.register Order do
     actions
   end
 
+  filter :status
+  filter :user
+  filter :created_at
+
   show do
     attributes_table do
       row :id
@@ -29,5 +33,12 @@ ActiveAdmin.register Order do
         column :item_price
       end
     end
+  end
+
+  form do |f|
+    f.inputs do
+      f.input :status, as: :select, collection: [ "new", "paid", "shipped" ], include_blank: false
+    end
+    f.actions
   end
 end

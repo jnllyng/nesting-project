@@ -17,14 +17,23 @@ ActiveAdmin.register User do
   end
 
   show do
-  attributes_table do
-    row :first_name
-    row :last_name
-    row :email
-    row :created_at
-    row("Encrypted Password") { |u| u.encrypted_password }
+    attributes_table do
+      row :first_name
+      row :last_name
+      row :email
+      row :created_at
+      row("Encrypted Password") { |u| u.encrypted_password }
+    end
+
+    panel "Addresses" do
+      table_for user.addresses do
+        column :street
+        column :city
+        column :postal_code
+        column :province
+      end
+    end
   end
-end
 
   form do |f|
     f.inputs do

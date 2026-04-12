@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "addresses/create"
+  get "addresses/destroy"
   get "pages/about"
   get "pages/contact"
   get "/about", to: "pages#about"
@@ -8,6 +10,8 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   resources :products, only: [ :index, :show ]
   resources :categories, only: [ :index, :show ]
+  resources :addresses, only: [ :create, :destroy ]
+  resources :orders, only: [ :index, :show ]
   get "/cart", to: "carts#show", as: "cart"
   post "/cart/add/:product_id", to: "carts#add", as: "add_to_cart"
   delete "/cart/remove/:product_id", to: "carts#remove", as: "remove_from_cart"

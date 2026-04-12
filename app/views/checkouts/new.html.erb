@@ -8,22 +8,22 @@
       <%= form_with url: checkout_path, method: :post, local: true do |f| %>
         <div style="margin-bottom: 15px;">
           <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Street</label>
-          <input type="text" name="address[street]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+          <input type="text" name="address[street]" value="<%= @address.street %>" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
         </div>
         <div style="margin-bottom: 15px;">
           <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">City</label>
-          <input type="text" name="address[city]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+          <input type="text" name="address[city]" value="<%= @address.city %>" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
         </div>
         <div style="margin-bottom: 15px;">
           <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Postal Code</label>
-          <input type="text" name="address[postal_code]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+          <input type="text" name="address[postal_code]" value="<%= @address.postal_code %>" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
         </div>
         <div style="margin-bottom: 20px;">
           <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Province</label>
           <select name="address[province_id]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
             <option value="">Select Province</option>
             <% @provinces.each do |p| %>
-              <option value="<%= p.id %>"><%= p.name %></option>
+              <option value="<%= p.id %>" <%= 'selected' if @address.province_id == p.id %>><%= p.name %></option>
             <% end %>
           </select>
         </div>

@@ -40,6 +40,7 @@
             <li class="nav-item"><%= link_to "Contact", contact_path, class: "nav-link" %></li>
             <li class="nav-item"><%= link_to "Cart (#{session[:cart]&.values&.sum || 0})", cart_path, class: "nav-link" %></li>
             <% if user_signed_in? %>
+            <li class="nav-item"><%= link_to "Orders", orders_path, class: "nav-link" %></li>
             <li class="nav-item"><%= link_to "Account", edit_user_registration_path, class: "nav-link" %></li>
             <li class="nav-item"><%= link_to "Log Out", destroy_user_session_path, class: "nav-link" %></li>
             <% else %>

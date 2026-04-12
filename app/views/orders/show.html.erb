@@ -1,0 +1,58 @@
+<div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+  <h1>Order #<%= @order.id %></h1>
+  <p style="font-size: 0.85rem; color: #999;"><%= @order.created_at.strftime("%B %d, %Y") %> · Status: <%= @order.status %></p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 30px;">
+    <div>
+      <h2 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;">Items</h2>
+      <% @order.order_items.each do |item| %>
+        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.85rem;">
+          <span><%= item.product.name %> × <%= item.quantity %></span>
+          <span>$<%= number_with_precision(item.item_price * item.quantity, precision: 2) %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <h2 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;">Summary</h2>
+      <div style="font-size: 0.85rem; line-height: 2;">
+        <div style="display: flex; justify-content: space-between;">
+          <span>Subtotal</span>
+          <span>$<%= number_with_precision(@order.order_items.sum { |i| i.item_price * i.quantity }, precision: 2) %></span>
+        </div>
+        <% if @order.gst_rate.to_f > 0 %>
+          <div style="display: flex; justify-content: space-between;">
+            <span>GST (<%= number_with_precision(@order.gst_rate * 100, precision: 0) %>%)</span>
+            <span>$<%= number_with_precision(@order.order_items.sum { |i| i.item_price * i.quantity } * @order.gst_rate, precision: 2) %></span>
+          </div>
+        <% end %>
+        <% if @order.pst_rate.to_f > 0 %>
+          <div style="display: flex; justify-content: space-between;">
+            <span>PST (<%= number_with_precision(@order.pst_rate * 100, precision: 0) %>%)</span>
+            <span>$<%= number_with_precision(@order.order_items.sum { |i| i.item_price * i.quantity } * @order.pst_rate, precision: 2) %></span>
+          </div>
+        <% end %>
+        <% if @order.hst_rate.to_f > 0 %>
+          <div style="display: flex; justify-content: space-between;">
+            <span>HST (<%= number_with_precision(@order.hst_rate * 100, precision: 0) %>%)</span>
+            <span>$<%= number_with_precision(@order.order_items.sum { |i| i.item_price * i.quantity } * @order.hst_rate, precision: 2) %></span>
+          </div>
+        <% end %>
+        <div style="display: flex; justify-content: space-between; font-weight: 500; border-top: 1px solid #111; margin-top: 10px; padding-top: 10px;">
+          <span>Total</span>
+          <span>$<%= number_with_precision(@order.total, precision: 2) %></span>
+        </div>
+      </div>
+
+      <h2 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 30px; margin-bottom: 15px;">Shipping Address</h2>
+      <p style="font-size: 0.85rem; line-height: 1.8;">
+        <%= @order.address.street %><br>
+        <%= @order.address.city %><br>
+        <%= @order.address.postal_code %><br>
+        <%= @order.province.name %>
+      </p>
+    </div>
+  </div>
+
+  <%= link_to "← Back to Orders", orders_path, style: "display: block; margin-top: 30px; font-size: 0.8rem; color: #111;" %>
+</div>

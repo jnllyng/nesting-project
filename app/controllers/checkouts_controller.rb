@@ -76,7 +76,7 @@ class CheckoutsController < ApplicationController
       user: current_user,
       address: address,
       province: province,
-      status: "pending",
+      status: "new",
       total: @checkout["total"],
       gst_rate: province.gst,
       pst_rate: province.pst,

@@ -40,3 +40,41 @@
 <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
   <%= button_to "Delete Account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, style: "background: none; border: none; font-size: 0.8rem; color: #999; text-decoration: underline; cursor: pointer;" %>
 </div>
+
+<div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #eee;">
+  <h2 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;">Saved Addresses</h2>
+
+  <% current_user.addresses.each do |address| %>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.85rem;">
+      <span><%= address.street %>, <%= address.city %>, <%= address.postal_code %>, <%= address.province.name %></span>
+      <%= button_to "Remove", address_path(address), method: :delete, style: "background: none; border: none; font-size: 0.75rem; text-decoration: underline; cursor: pointer; color: #999;" %>
+    </div>
+  <% end %>
+
+  <h3 style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 20px; margin-bottom: 15px;">Add New Address</h3>
+
+  <%= form_with url: addresses_path, method: :post, local: true do |f| %>
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Street</label>
+      <input type="text" name="address[street]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">City</label>
+      <input type="text" name="address[city]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Postal Code</label>
+      <input type="text" name="address[postal_code]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+    </div>
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Province</label>
+      <select name="address[province_id]" style="width: 100%; padding: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 0.85rem; box-sizing: border-box;">
+        <option value="">Select Province</option>
+        <% Province.all.order(:name).each do |p| %>
+          <option value="<%= p.id %>"><%= p.name %></option>
+        <% end %>
+      </select>
+    </div>
+    <button type="submit" style="padding: 12px 30px; background: #111; color: #fff; border: none; font-family: inherit; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">Save Address</button>
+  <% end %>
+</div>

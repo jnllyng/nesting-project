@@ -1,0 +1,30 @@
+<div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+  <h1>My Orders</h1>
+
+  <% if @orders.empty? %>
+    <p style="color: #999; font-size: 0.85rem;">No orders yet.</p>
+  <% else %>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 30px;">
+      <thead>
+        <tr style="border-bottom: 1px solid #111;">
+          <th style="text-align: left; padding: 10px 0; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 400;">Order #</th>
+          <th style="text-align: left; padding: 10px 0; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 400;">Date</th>
+          <th style="text-align: left; padding: 10px 0; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 400;">Status</th>
+          <th style="text-align: left; padding: 10px 0; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 400;">Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 15px 0; font-size: 0.85rem;">#<%= order.id %></td>
+            <td style="padding: 15px 0; font-size: 0.85rem;"><%= order.created_at.strftime("%B %d, %Y") %></td>
+            <td style="padding: 15px 0; font-size: 0.85rem;"><%= order.status %></td>
+            <td style="padding: 15px 0; font-size: 0.85rem;">$<%= number_with_precision(order.total, precision: 2) %></td>
+            <td style="padding: 15px 0;"><%= link_to "View", order_path(order), style: "font-size: 0.8rem; color: #111;" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
