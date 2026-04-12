@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
-  belongs_to :category
+  has_many :product_categories
+  has_many :categories, through: :product_categories
   has_one_attached :image do |attachable|
   attachable.variant :thumb, resize_to_limit: [ 300, 300 ]
   attachable.variant :medium, resize_to_limit: [ 600, 600 ]
@@ -14,6 +15,6 @@ end
   end
 
   def self.ransackable_associations(auth_object = nil)
-    [ "category" ]
+  [ "categories", "product_categories" ]
   end
 end
