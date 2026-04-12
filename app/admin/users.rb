@@ -7,33 +7,35 @@ ActiveAdmin.register User do
   filter :created_at
 
   index do
-    selectable_column
-    id_column
-    column :first_name
-    column :last_name
-    column :email
-    column :created_at
-    actions
-  end
+  selectable_column
+  id_column
+  column :first_name
+  column :last_name
+  column :email
+  column :province
+  column :created_at
+  actions
+end
 
   show do
-    attributes_table do
-      row :first_name
-      row :last_name
-      row :email
-      row :created_at
-      row("Encrypted Password") { |u| u.encrypted_password }
-    end
+  attributes_table do
+    row :first_name
+    row :last_name
+    row :email
+    row :province
+    row :created_at
+    row("Encrypted Password") { |u| u.encrypted_password }
+  end
 
-    panel "Addresses" do
-      table_for user.addresses do
-        column :street
-        column :city
-        column :postal_code
-        column :province
-      end
+  panel "Addresses" do
+    table_for user.addresses do
+      column :street
+      column :city
+      column :postal_code
+      column :province
     end
   end
+end
 
   form do |f|
     f.inputs do
