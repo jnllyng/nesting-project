@@ -3,7 +3,14 @@
   <% @categories.each do |category| %>
     <div class="col-4" style="margin-bottom: 40px;">
       <%= link_to category_path(category), style: "text-decoration: none; color: #111;" do %>
-        <div style="background-color: #f0f0f0; height: 300px; margin-bottom: 15px;"></div>
+        <% featured_product = category.products.find { |p| p.image.attached? } || category.products.first %>
+        <% if featured_product&.image&.attached? %>
+          <%= image_tag featured_product.image.variant(:medium), style: "width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px;" %>
+        <% elsif featured_product&.image_url.present? %>
+          <%= image_tag featured_product.image_url, style: "width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px;" %>
+        <% else %>
+          <div style="background-color: #f0f0f0; height: 300px; margin-bottom: 15px;"></div>
+        <% end %>
         <p style="font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;">← <%= category.name %></p>
       <% end %>
     </div>
