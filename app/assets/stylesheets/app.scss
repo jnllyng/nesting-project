@@ -1,0 +1,130 @@
+// Variables
+$primary: #111;
+$secondary: #666;
+$light-gray: #f0f0f0;
+$border: #ddd;
+$spacing: 40px;
+$font: 'Inter', sans-serif;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font;
+  font-weight: 300;
+  background-color: #fff;
+  color: $primary;
+}
+
+.navbar {
+  border-bottom: 1px solid $primary;
+  padding: ($spacing / 2) $spacing;
+  background-color: #fff !important;
+
+  &-brand {
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $primary !important;
+  }
+}
+
+.nav-link {
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $primary !important;
+  margin-left: $spacing * 0.75;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.main-content {
+  padding: $spacing * 1.5 $spacing;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing;
+}
+
+%card-image {
+  width: 100%;
+  aspect-ratio: 3/4;
+  margin-bottom: 15px;
+}
+
+.product-card {
+  cursor: pointer;
+
+  img {
+    @extend %card-image;
+    object-fit: cover;
+  }
+
+  .placeholder-img {
+    @extend %card-image;
+    background-color: $light-gray;
+  }
+
+  h3 {
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    margin-bottom: 5px;
+  }
+
+  .price {
+    font-size: 0.85rem;
+    color: $secondary;
+  }
+
+  a {
+    text-decoration: none;
+    color: $primary;
+
+    &:hover h3 {
+      text-decoration: underline;
+    }
+  }
+}
+
+h1 {
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: $spacing;
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+
+  a, span {
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: $primary;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid $border;
+  }
+
+  .current {
+    background: $primary;
+    color: #fff;
+    padding: 5px 10px;
+    border: 1px solid $primary;
+    font-size: 0.8rem;
+  }
+}

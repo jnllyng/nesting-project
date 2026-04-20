@@ -90,6 +90,7 @@ production:
     database: nesting_project_production
     username: nesting_project
     password: <%= ENV["NESTING_PROJECT_DATABASE_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "localhost") %>
   cache:
     <<: *primary_production
     database: nesting_project_production_cache

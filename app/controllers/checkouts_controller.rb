@@ -57,22 +57,10 @@ class CheckoutsController < ApplicationController
     end
   end
 
-  def complete
+def complete
   @cart = session[:cart] || {}
   @checkout = session[:checkout]
   @cart_items = build_cart_items(@cart)
-
-  begin
-    charge = Stripe::Charge.create(
-      amount: (@checkout["total"].to_f * 100).to_i,
-      currency: "cad",
-      source: params[:stripeToken],
-      description: "Nesting Order"
-    )
-  rescue Stripe::CardError => e
-    redirect_to confirm_checkout_path, alert: e.message
-    return
-  end
 
   address_data = @checkout["address"]
   province = Province.find(@checkout["province_id"])
@@ -88,12 +76,11 @@ class CheckoutsController < ApplicationController
     user: current_user,
     address: address,
     province: province,
-    status: "paid",
+    status: "new",
     total: @checkout["total"],
     gst_rate: province.gst,
     pst_rate: province.pst,
-    hst_rate: province.hst,
-    stripe_charge_id: charge.id
+    hst_rate: province.hst
   )
 
   @cart_items.each do |item|
@@ -103,6 +90,20 @@ class CheckoutsController < ApplicationController
       quantity: item[:quantity],
       item_price: item[:product].price
     )
+  end
+
+  begin
+    charge = Stripe::Charge.create(
+      amount: (@checkout["total"].to_f * 100).to_i,
+      currency: "cad",
+      source: params[:stripeToken],
+      description: "Nesting Order ##{order.id}"
+    )
+    order.update!(status: "paid", stripe_charge_id: charge.id)
+  rescue Stripe::CardError => e
+    order.destroy
+    redirect_to confirm_checkout_path, alert: e.message
+    return
   end
 
   session[:cart] = {}
