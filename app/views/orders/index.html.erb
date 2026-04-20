@@ -17,7 +17,7 @@
       <tbody>
         <% @orders.each do |order| %>
           <tr style="border-bottom: 1px solid #eee;">
-            <td style="padding: 15px 0; font-size: 0.85rem;">#<%= order.id %></td>
+            <td style="padding: 15px 0; font-size: 0.85rem;">#<%= @orders.length - @orders.index(order) %></td>
             <td style="padding: 15px 0; font-size: 0.85rem;"><%= order.created_at.strftime("%B %d, %Y") %></td>
             <td style="padding: 15px 0; font-size: 0.85rem;"><%= order.status %></td>
             <td style="padding: 15px 0; font-size: 0.85rem;">$<%= number_with_precision(order.total, precision: 2) %></td>
